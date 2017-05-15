@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class NPCDialogue : MonoBehaviour {
+
+    public float distanceToPlayer;
+    public Text dialogue1;
+    private Text dialogue2;
+    private Text dialogue3;
+    private float distance;
+    private GameObject player;
+    public TextAsset textFile;
+    private string[] dialogueLines;
+    private bool talking;
+    private int lineCount = 0;
+    private int totalLines;
+    
+    void Start ()
+    {
+        player = GameObject.Find("FPSController");
+        dialogue1.enabled = false;
+        dialogue1.text = "Hello \nHow are you? \nWhat do you want?\n";
+        dialogueLines = dialogue1.text.Split('\n');
+        totalLines = dialogueLines.Length - 1;
+    }
+	
+	void Update ()
+    {
+        distance = Vector3.Distance(gameObject.transform.position, player.transform.position);
+        if (distance <= distanceToPlayer && Input.GetKeyUp(KeyCode.F))
+        {
+            dialogue1.enabled = true;    
+            dialogue1.text = dialogueLines[lineCount];
+            lineCount++;
+            
+
+            if(lineCount - 1 >= totalLines)
+            {
+                lineCount = 0;
+            }
+        }
+
+        else if(distance >= distanceToPlayer)
+        {
+            dialogue1.enabled = false;
+            lineCount = 0;
+        }
+    }
+}
